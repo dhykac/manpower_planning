@@ -1,0 +1,374 @@
+---
+title: "Manpower Planning"
+author: "Andhyka Cakrabuana Adhitama"
+date: "- 1/11/2022"
+output: pdf_document
+---
+
+# Preparation
+```{r}
+library(scales)
+library(rlang)
+library(lazyeval)
+library(ggplot2)
+library(fpp2)
+library(readxl)
+
+df_prod <- read.csv("https://raw.githubusercontent.com/dhykac/manpower_planning/main/df_productivity.csv")
+summary(df_prod)
+View(df_prod)
+```
+
+
+# INB-PROD
+```{r}
+Yinp <- ts(df_prod[,2])
+autoplot(Yinp) + ggtitle("Time Series Plot : INB-PROD") + ylab("Sum of Pallets")
+```
+#### As we can see, the data had a trend so we will made new data with added differencing method.
+```{r}
+DYinp <- diff(Yinp)
+autoplot(DYinp) + ggtitle("Time Series Plot : INB-PROD with diff") + ylab("Sum of Pallets")
+```
+#### The data didn't have seasonal. So we could go to next step for determine best model.
+```{r}
+fit <- naive(DYinp)
+print(summary(fit))
+checkresiduals(fit)
+## Residuals = 1208
+
+fit_ets <- ets(Yinp)
+print(summary(fit_ets))
+checkresiduals(fit_ets)
+## Residuals = 713
+
+fit_arima <- auto.arima(DYinp, d=0, D=0, stepwise = FALSE, approximation = FALSE, trace = TRUE)
+print(summary(fit_arima))
+checkresiduals(fit_arima)
+## Residuals = 710
+## Residuals diff 2 = 779
+```
+#### The best model for this one is ARIMA, since the model had smallest residuals.
+```{r}
+fcast <- forecast(fit_arima, h=3)
+autoplot(fcast)
+print(summary(fcast))
+```
+#### Forecast workload for next day with confidence 95% is 1919 pallets.
+
+
+
+# INBOUND
+```{r}
+Yinc <- ts(df_prod[,3])
+autoplot(Yinc) + ggtitle("Time Series Plot : INBOUND") + ylab("Sum of Pallets")
+```
+#### As we can see, the data had a trend so we will made new data with added differencing method.
+```{r}
+DYinc <- diff(Yinc)
+autoplot(DYinc) + ggtitle("Time Series Plot : INBOUND with diff") + ylab("Sum of Pallets")
+```
+#### The data didn't have seasonal. So we could go to next step for determine best model.
+```{r}
+fit <- naive(DYinc)
+print(summary(fit))
+checkresiduals(fit)
+## Residuals = 1806
+
+fit_ets <- ets(Yinc)
+print(summary(fit_ets))
+checkresiduals(fit_ets)
+## Residuals = 1069
+
+fit_arima <- auto.arima(DYinc, d=0, D=0, stepwise = FALSE, approximation = FALSE, trace = TRUE)
+print(summary(fit_arima))
+checkresiduals(fit_arima)
+## Residuals = 1032
+## Residuals diff 2 = 1108
+```
+#### The best model for this one is ARIMA, since the model had smallest residuals.
+```{r}
+fcast <- forecast(fit_arima, h=3)
+autoplot(fcast)
+print(summary(fcast))
+```
+#### Forecast workload for next day with confidence 95% is 2397 pallets.
+
+
+
+# INTERNAL
+```{r}
+Yint <- ts(df_prod[,4])
+autoplot(Yint) + ggtitle("Time Series Plot : INTERNAL") + ylab("Sum of Pallets")
+```
+#### As we can see, the data had a trend so we will made new data with added differencing method.
+```{r}
+DYint <- diff(Yint)
+autoplot(DYint) + ggtitle("Time Series Plot : INTERNAL with diff") + ylab("Sum of Pallets")
+```
+#### The data didn't have seasonal. So we could go to next step for determine best model.
+```{r}
+fit <- naive(DYint)
+print(summary(fit))
+checkresiduals(fit)
+## Residuals = 400
+
+fit_ets <- ets(Yint)
+print(summary(fit_ets))
+checkresiduals(fit_ets)
+## Residuals = 189
+
+fit_arima <- auto.arima(DYint, d=0, D=0, stepwise = FALSE, approximation = FALSE, trace = TRUE)
+print(summary(fit_arima))
+checkresiduals(fit_arima)
+## Residuals = 182
+## Residuals diff 2 = 290
+```
+#### The best model for this one is ARIMA, since the model had smallest residuals.
+```{r}
+fcast <- forecast(fit_arima, h=3)
+autoplot(fcast)
+print(summary(fcast))
+```
+#### Forecast workload for next day with confidence 95% is 397 pallets.
+
+
+
+# NARROW
+```{r}
+Ynar <- ts(df_prod[,5])
+autoplot(Ynar) + ggtitle("Time Series Plot : NARROW") + ylab("Sum of Pallets")
+```
+#### As we can see, the data had a trend so we will made new data with added differencing method.
+```{r}
+DYnar <- diff(Ynar)
+autoplot(DYnar) + ggtitle("Time Series Plot : NARROW with diff") + ylab("Sum of Pallets")
+```
+#### The data didn't have seasonal. So we could go to next step for determine best model.
+```{r}
+fit <- naive(DYnar)
+print(summary(fit))
+checkresiduals(fit)
+## Residuals = 319
+
+fit_ets <- ets(Ynar)
+print(summary(fit_ets))
+checkresiduals(fit_ets)
+## Residuals = 141
+
+fit_arima <- auto.arima(DYnar, d=0, D=0, stepwise = FALSE, approximation = FALSE, trace = TRUE)
+print(summary(fit_arima))
+checkresiduals(fit_arima)
+## Residuals = 145
+## Residuals diff 2 = 154
+```
+#### The best model for this one is Exponential Smoothing, since the model had smallest residuals.
+```{r}
+fcast <- forecast(fit_ets, h=3)
+autoplot(fcast)
+print(summary(fcast))
+```
+#### Forecast workload for next day with confidence 95% is 498 pallets.
+
+
+
+# NARROW-OUT
+```{r}
+Ynao <- ts(df_prod[,6])
+autoplot(Ynao) + ggtitle("Time Series Plot : NARROW-OUT") + ylab("Sum of Pallets")
+```
+#### As we can see, the data had a trend so we will made new data with added differencing method.
+```{r}
+DYnao <- diff(Ynao)
+autoplot(DYnao) + ggtitle("Time Series Plot : NARROW-OUT with diff") + ylab("Sum of Pallets")
+```
+#### The data didn't have seasonal. So we could go to next step for determine best model.
+```{r}
+fit <- naive(DYnao)
+print(summary(fit))
+checkresiduals(fit)
+## Residuals = 258
+
+fit_ets <- ets(Ynao)
+print(summary(fit_ets))
+checkresiduals(fit_ets)
+## Residuals = 115
+
+fit_arima <- auto.arima(DYnao, d=0, D=0, stepwise = FALSE, approximation = FALSE, trace = TRUE)
+print(summary(fit_arima))
+checkresiduals(fit_arima)
+## Residuals = 118
+## Residuals diff 2 = 137
+```
+#### The best model for this one is Exponential Smoothing, since the model had smallest residuals.
+```{r}
+fcast <- forecast(fit_ets, h=3)
+autoplot(fcast)
+print(summary(fcast))
+```
+#### Forecast workload for next day with confidence 95% is 565 pallets.
+
+
+
+# NARROW-RPL
+```{r}
+Ynarp <- ts(df_prod[,7])
+autoplot(Ynarp) + ggtitle("Time Series Plot : NARROW-RPL") + ylab("Sum of Pallets")
+```
+#### As we can see, the data had a trend so we will made new data with added differencing method.
+```{r}
+DYnarp <- diff(Ynarp)
+autoplot(DYnarp) + ggtitle("Time Series Plot : NARROW-RPL with diff") + ylab("Sum of Pallets")
+```
+#### The data didn't have seasonal. So we could go to next step for determine best model.
+```{r}
+fit <- naive(DYnarp)
+print(summary(fit))
+checkresiduals(fit)
+## Residuals = 19
+
+fit_ets <- ets(Ynarp)
+print(summary(fit_ets))
+checkresiduals(fit_ets)
+## Residuals = 10
+
+fit_arima <- auto.arima(DYnarp, d=0, D=0, stepwise = FALSE, approximation = FALSE, trace = TRUE)
+print(summary(fit_arima))
+checkresiduals(fit_arima)
+## Residuals = 10
+## Residuals diff 2 = 14
+```
+#### The best model for this one is Exponential Smoothing, since the model had smallest residuals.
+```{r}
+fcast <- forecast(fit_ets, h=3)
+autoplot(fcast)
+print(summary(fcast))
+```
+#### Forecast workload for next day with confidence 95% is 25 pallets.
+
+
+
+# O-PND-OUT
+```{r}
+Ypnd <- ts(df_prod[,8])
+autoplot(Ypnd) + ggtitle("Time Series Plot : O-PND-OUT") + ylab("Sum of Pallets")
+```
+#### As we can see, the data had a trend so we will made new data with added differencing method.
+```{r}
+DYpnd <- diff(Ypnd)
+autoplot(DYpnd) + ggtitle("Time Series Plot : O-PND-OUT with diff") + ylab("Sum of Pallets")
+```
+#### The data didn't have seasonal. So we could go to next step for determine best model.
+```{r}
+fit <- naive(DYpnd)
+print(summary(fit))
+checkresiduals(fit)
+## Residuals = 254
+
+fit_ets <- ets(Ypnd)
+print(summary(fit_ets))
+checkresiduals(fit_ets)
+## Residuals = 101
+
+fit_arima <- auto.arima(DYpnd, d=0, D=0, stepwise = FALSE, approximation = FALSE, trace = TRUE)
+print(summary(fit_arima))
+checkresiduals(fit_arima)
+## Residuals = 114
+## Residuals diff 2 = 147
+```
+#### The best model for this one is Exponential Smoothing, since the model had smallest residuals.
+```{r}
+fcast <- forecast(fit_ets, h=3)
+autoplot(fcast)
+print(summary(fcast))
+```
+#### Forecast workload for next day with confidence 95% is 425 pallets.
+
+
+
+# OUT-CONT
+```{r}
+Youc <- ts(df_prod[,9])
+autoplot(Youc) + ggtitle("Time Series Plot : OUT-CONT") + ylab("Sum of Pallets")
+```
+#### As we can see, the data had a trend so we will made new data with added differencing method.
+```{r}
+DYouc <- diff(Youc)
+autoplot(DYouc) + ggtitle("Time Series Plot : OUT-CONT with diff") + ylab("Sum of Pallets")
+```
+#### The data didn't have seasonal. So we could go to next step for determine best model.
+```{r}
+fit <- naive(DYouc)
+print(summary(fit))
+checkresiduals(fit)
+## Residuals = 695
+
+fit_ets <- ets(Youc)
+print(summary(fit_ets))
+checkresiduals(fit_ets)
+## Residuals = 367
+
+fit_arima <- auto.arima(DYouc, d=0, D=0, stepwise = FALSE, approximation = FALSE, trace = TRUE)
+print(summary(fit_arima))
+checkresiduals(fit_arima)
+## Residuals = 420
+## Residuals diff 2 = 475
+```
+#### The best model for this one is Exponential Smoothing, since the model had smallest residuals.
+```{r}
+fcast <- forecast(fit_ets, h=3)
+autoplot(fcast)
+print(summary(fcast))
+```
+#### Forecast workload for next day with confidence 95% is 1602 pallets.
+
+
+
+# OUTBOUND
+```{r}
+Youb <- ts(df_prod[,10])
+autoplot(Youb) + ggtitle("Time Series Plot : OUTBOUND") + ylab("Sum of Pallets")
+```
+#### As we can see, the data had a trend so we will made new data with added differencing method.
+```{r}
+DYoub <- diff(Youb)
+autoplot(DYoub) + ggtitle("Time Series Plot : OUTBOUND with diff") + ylab("Sum of Pallets")
+```
+#### The data didn't have seasonal. So we could go to next step for determine best model.
+```{r}
+fit <- naive(DYoub)
+print(summary(fit))
+checkresiduals(fit)
+## Residuals = 1104
+
+fit_ets <- ets(Youb)
+print(summary(fit_ets))
+checkresiduals(fit_ets)
+## Residuals = 544
+
+fit_arima <- auto.arima(DYoub, d=0, D=0, stepwise = FALSE, approximation = FALSE, trace = TRUE)
+print(summary(fit_arima))
+checkresiduals(fit_arima)
+## Residuals = 557
+## Residuals diff 2 = 661
+```
+#### The best model for this one is Exponential Smoothing, since the model had smallest residuals.
+```{r}
+fcast <- forecast(fit_ets, h=3)
+autoplot(fcast)
+print(summary(fcast))
+```
+#### Forecast workload for next day with confidence 95% is 2617 pallets.
+
+
+
+# So the total workload is :
+- INB-PROD 1919 pallets
+- INBOUND 2397 pallets
+- INTERNAL 397 pallets
+- NARROW 498 pallets
+- NARROW-OUT 565 pallets
+- NARROW-RPL 25 pallets
+- O-PND-OUT 425 pallets
+- OUT-CONT 1602 pallets
+#### OUTBOUND 2617 pallets
