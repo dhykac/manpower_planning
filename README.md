@@ -7,4 +7,4 @@ This repository is about forecasting manpower planning by using product movement
 
 Update timelines.
 - Update 04.01.2022 : Added trend parameter to Exponential Smoothing.
-- Update 11.01.2022 : Added new R script version with three different methods (Naive Bayes, ARIMA, Exponential Smoothing).
+- Update 11.01.2022 : Added new R script & R markdown version with three different methods (Naive Bayes, ARIMA, Exponential Smoothing).
