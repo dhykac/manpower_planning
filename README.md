@@ -4,7 +4,23 @@ This repository is about forecasting manpower planning by using product movement
 
 ## Data Sources
 - [Dataset for Python](https://github.com/dhykac/manpower_planning/blob/main/PRODUCTIVITY%20DESEMBER%202021.XLSX)
+```python
+# Packages for Python
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from statsmodels.tsa.holtwinters import ExponentialSmoothing
+```
 - [Dataset for R](https://github.com/dhykac/manpower_planning/blob/main/manpower_planning.R)
+```r
+# Library for R
+library(scales)
+library(rlang)
+library(lazyeval)
+library(ggplot2)
+library(fpp2)
+library(readxl)
+```
 
 ## Objectives
 This repository tried to answer following question :
