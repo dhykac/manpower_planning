@@ -1,6 +1,6 @@
 # Manpower Planning using Product Movement Forecast
 
-This repository is about forecasting manpower planning by using product movement forecasting each day.
+This repository is about manpower planning by using product movement forecasting each day.
 
 ## Sources
 - [Dataset for Python](https://github.com/dhykac/manpower_planning/blob/main/PRODUCTIVITY%20DESEMBER%202021.XLSX)
